@@ -2,9 +2,17 @@
 
 public abstract class Day
 {
-    public bool IsTest { get; set; }
-    public int Part1Answer => IsTest ? SolvePart1(GetPart1Lines()) : SolvePart1(GetLines());
-    public int Part2Answer => IsTest ? SolvePart2(GetPart2Lines()) : SolvePart2(GetLines());
+    public void Solve()
+    {
+        Console.WriteLine($"Part 1 Test: {GetPart1Answer(true)}");
+        Console.WriteLine($"Part 1: {GetPart1Answer(false)}");
+        Console.WriteLine($"Part 2 Test: {GetPart2Answer(true)}");
+        Console.WriteLine($"Part 2: {GetPart2Answer(false)}");
+    }
+
+    public int GetPart1Answer(bool isTest) => isTest ? SolvePart1(GetPart1Lines()) : SolvePart1(GetLines());
+    public int GetPart2Answer(bool isTest) => isTest ? SolvePart2(GetPart2Lines()) : SolvePart2(GetLines());
+
     protected abstract int SolvePart1(List<string> lines);
     protected abstract int SolvePart2(List<string> lines);
     protected abstract int GetDayNum();
