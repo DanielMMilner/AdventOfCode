@@ -10,14 +10,14 @@ public class Day5 : Day
     {
         var maps = GetMaps(lines);
 
-        var seeds = lines[0].Split(":")[1].Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(long.Parse);
-        var seedLocation = new ValueTuple<long, long>(-1, -1);
+        var seeds = lines[0].Split(":")[1].Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(uint.Parse);
+        var seedLocation = new ValueTuple<uint, uint>(uint.MaxValue, uint.MaxValue);
 
         foreach (var seed in seeds)
         {
             var location = GetLocationFromSeed(maps, seed);
 
-            if (seedLocation.Item2 == -1 || location < seedLocation.Item2)
+            if (location < seedLocation.Item2)
             {
                 seedLocation.Item1 = seed;
                 seedLocation.Item2 = location;
@@ -29,37 +29,82 @@ public class Day5 : Day
 
     protected override int SolvePart2(List<string> lines)
     {
-        var maps = GetMaps(lines);
+        var reversedMaps = GetMaps(lines).Reverse().ToArray();
 
         var seedRanges = lines[0]
             .Split(":")[1]
             .Split(" ")
             .Where(x => !string.IsNullOrEmpty(x))
-            .Select(long.Parse)
+            .Select(uint.Parse)
             .Chunk(2)
+            .Select(x => new { Start = x[0], End = x[0] + x[1] })
             .ToList();
+        const int batchSize = 1000000;
 
-        var locations = new ConcurrentBag<long>();
-
-        Parallel.ForEach(seedRanges, ranges =>
+        uint location = 0;
+        while (true)
         {
-            var minLocation = long.MaxValue;
-            var start = ranges[0];
-            var end = start + ranges[0 + 1];
-            for (var j = start; j < end; j++)
-            {
-                var location = GetLocationFromSeed(maps, j);
+            var numRanges = Enumerable.Range(0, 20).Select(x => (uint)(x * batchSize + location)).ToList();
+            var seeds = new ConcurrentBag<uint>();
+            var lowestThreadFound = uint.MaxValue;
 
-                if (location < minLocation)
+            Parallel.ForEach(numRanges, numRange =>
+            {
+                Range? range;
+                Range? tempRange;
+                Map? tempMap;
+                uint num;
+                for (uint b = 0; b <= batchSize; b++)
                 {
-                    minLocation = location;
+                    if (numRange > lowestThreadFound)
+                    {
+                        return;
+                    }
+                    num = numRange + b;
+                    var tempSeed = num;
+                    for (var i = 0; i < reversedMaps.Length; i++)
+                    {
+                        tempMap = reversedMaps[i];
+                        range = null;
+
+                        for (var j = 0; j < tempMap.Ranges.Count; j++)
+                        {
+                            tempRange = tempMap.Ranges[j];
+                            if (tempSeed >= tempRange.DestinationStart && tempSeed <= tempRange.DestinationEnd)
+                            {
+                                range = tempRange;
+                                break;
+                            }
+                        }
+
+                        if (range != null)
+                        {
+                            tempSeed = tempSeed - range.DestinationStart + range.SourceStart;
+                        }
+                    }
+
+                    for (var i = 0; i < seedRanges.Count; i++)
+                    {
+                        if (seedRanges[i].Start <= tempSeed && seedRanges[i].End >= tempSeed)
+                        {
+                            seeds.Add(num);
+                            if (numRange < lowestThreadFound)
+                            {
+                                lowestThreadFound = numRange;
+                            }
+                            return;
+                        }
+                    }
                 }
+            });
+
+            if (!seeds.IsEmpty)
+            {
+                return (int)seeds.MinBy(x => x);
             }
 
-            locations.Add(minLocation);
-        });
-
-        return (int)locations.ToList().MinBy(x => x);
+            location = numRanges.Last() + 1;
+        }
     }
 
     private static Map[] GetMaps(IEnumerable<string> lines)
@@ -84,29 +129,32 @@ public class Day5 : Day
             }
             else
             {
-                var map = line.Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(long.Parse).ToArray();
-                currentMap.Ranges.Add(new Range
+                var map = line.Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(uint.Parse).ToArray();
+                var range = new Range
                 {
-                    Destination = map[0],
+                    DestinationStart = map[0],
+                    DestinationEnd = map[0] + map[2],
                     SourceStart = map[1],
                     SourceEnd = map[1] + map[2]
-                });
+                };
+                currentMap.Ranges.Add(range);
             }
         }
 
         return maps.ToArray();
     }
 
-    private static long GetLocationFromSeed(Map[] maps, long seed)
+    private static uint GetLocationFromSeed(Map[] maps, uint seed)
     {
         Range? range;
         Range? tempRange;
         Map? tempMap;
-        for (int i = 0; i < maps.Length; i++)
+        for (var i = 0; i < maps.Length; i++)
         {
             tempMap = maps[i];
             range = null;
-            for (int j = 0; j < tempMap.Ranges.Count; j++)
+
+            for (var j = 0; j < tempMap.Ranges.Count; j++)
             {
                 tempRange = tempMap.Ranges[j];
                 if (seed >= tempRange.SourceStart && seed <= tempRange.SourceEnd)
@@ -118,7 +166,7 @@ public class Day5 : Day
 
             if (range != null)
             {
-                seed = seed - range.SourceStart + range.Destination;
+                seed = seed - range.SourceStart + range.DestinationStart;
             }
         }
 
@@ -133,8 +181,9 @@ public class Day5 : Day
 
     private class Range
     {
-        public long Destination { get; init; }
-        public long SourceStart { get; init; }
-        public long SourceEnd { get; init; }
+        public uint DestinationStart { get; init; }
+        public uint DestinationEnd { get; init; }
+        public uint SourceStart { get; init; }
+        public uint SourceEnd { get; init; }
     }
 }
