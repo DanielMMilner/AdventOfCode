@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using Microsoft.VisualBasic.CompilerServices;
 
 namespace AdventOfCode2023.Days;
 
@@ -44,14 +43,14 @@ public class Day5 : Day
 
         Parallel.ForEach(seedRanges, ranges =>
         {
-            long minLocation = -1;
+            var minLocation = long.MaxValue;
             var start = ranges[0];
             var end = start + ranges[0 + 1];
             for (var j = start; j < end; j++)
             {
                 var location = GetLocationFromSeed(maps, j);
 
-                if (minLocation == -1 || location < minLocation)
+                if (location < minLocation)
                 {
                     minLocation = location;
                 }
@@ -63,7 +62,7 @@ public class Day5 : Day
         return (int)locations.ToList().MinBy(x => x);
     }
 
-    private static List<Map> GetMaps(IEnumerable<string> lines)
+    private static Map[] GetMaps(IEnumerable<string> lines)
     {
         var maps = new List<Map>
         {
@@ -86,26 +85,40 @@ public class Day5 : Day
             else
             {
                 var map = line.Split(" ").Where(x => !string.IsNullOrEmpty(x)).Select(long.Parse).ToArray();
-                currentMap.Ranges.Add(new Ranges
+                currentMap.Ranges.Add(new Range
                 {
                     Destination = map[0],
-                    Source = map[1],
-                    Range = map[2]
+                    SourceStart = map[1],
+                    SourceEnd = map[1] + map[2]
                 });
             }
         }
 
-        return maps;
+        return maps.ToArray();
     }
 
-    private long GetLocationFromSeed(List<Map> maps, long seed)
+    private static long GetLocationFromSeed(Map[] maps, long seed)
     {
-        foreach (var map in maps)
+        Range? range;
+        Range? tempRange;
+        Map? tempMap;
+        for (int i = 0; i < maps.Length; i++)
         {
-            var range = map.Ranges.FirstOrDefault(x => seed >= x.Source && seed <= x.Source + x.Range);
+            tempMap = maps[i];
+            range = null;
+            for (int j = 0; j < tempMap.Ranges.Count; j++)
+            {
+                tempRange = tempMap.Ranges[j];
+                if (seed >= tempRange.SourceStart && seed <= tempRange.SourceEnd)
+                {
+                    range = tempRange;
+                    break;
+                }
+            }
+
             if (range != null)
             {
-                seed = seed - range.Source + range.Destination;
+                seed = seed - range.SourceStart + range.Destination;
             }
         }
 
@@ -114,14 +127,14 @@ public class Day5 : Day
 
     private class Map(string name)
     {
-        public string Name { get; set; } = name;
-        public List<Ranges> Ranges { get; set; } = [];
+        public string Name { get; } = name;
+        public List<Range> Ranges { get; } = [];
     }
 
-    private class Ranges
+    private class Range
     {
-        public long Destination { get; set; }
-        public long Source { get; set; }
-        public long Range { get; set; }
+        public long Destination { get; init; }
+        public long SourceStart { get; init; }
+        public long SourceEnd { get; init; }
     }
 }
