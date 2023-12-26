@@ -1,6 +1,6 @@
 ﻿using AdventOfCode2023.Days;
 
-var day = new Day3
+var day = new Day4
 {
     IsTest = false
 };
