@@ -1,11 +1,18 @@
-﻿using AdventOfCode2023.Days;
+﻿using System.Reflection;
+using AdventOfCode2023.Days;
 using Xunit;
 
 namespace Tests.Tests;
 
 public abstract class DayTest
 {
-    protected abstract Day GetDay();
+    private Day GetDay()
+    {
+        var newClass = Assembly.GetAssembly(typeof(Day))!
+            .CreateInstance($"AdventOfCode2023.Days.{GetType().Name.Replace("Test", string.Empty)}");
+        return (Day)newClass!;
+    }
+
     protected abstract long GetPart1SampleAnswer();
     protected abstract long GetPart1Answer();
     protected abstract long GetPart2SampleAnswer();

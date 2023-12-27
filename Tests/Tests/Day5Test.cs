@@ -1,10 +1,7 @@
-﻿using AdventOfCode2023.Days;
-
-namespace Tests.Tests;
+﻿namespace Tests.Tests;
 
 public class Day5Test : DayTest
 {
-    protected override Day GetDay() => new Day5();
     protected override long GetPart1SampleAnswer() => 35;
     protected override long GetPart1Answer() => 424_490_994;
     protected override long GetPart2SampleAnswer() => 46;

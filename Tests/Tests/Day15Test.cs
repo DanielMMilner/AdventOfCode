@@ -1,6 +1,6 @@
 ﻿namespace Tests.Tests;
 
-public class Day7Test : DayTest
+public class Day15Test : DayTest
 {
     protected override long GetPart1SampleAnswer() => -1;
     protected override long GetPart1Answer() => -1;

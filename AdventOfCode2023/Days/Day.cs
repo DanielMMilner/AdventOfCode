@@ -10,16 +10,16 @@ public abstract class Day
         Console.WriteLine($"Part 2: {GetPart2Answer(false)}");
     }
 
-    public long GetPart1Answer(bool isTest) => SolvePart1(GetLines(isTest, false));
-    public long GetPart2Answer(bool isTest) => SolvePart2(GetLines(isTest, true));
+    public long GetPart1Answer(bool useSample) => SolvePart1(GetLines(useSample, false));
+    public long GetPart2Answer(bool useSample) => SolvePart2(GetLines(useSample, true));
 
     private int GetDayNum => int.Parse(GetType().Name.Replace("Day", string.Empty));
     private const string Path = @"F:\Documents\Code\AdventOfCode2023\AdventOfCode2023\Data\day";
 
-    private List<string> GetLines(bool isTest, bool isPart2)
+    private List<string> GetLines(bool useSample, bool isPart2)
     {
         var fileName = "data.txt";
-        if (isTest)
+        if (useSample)
         {
             fileName = isPart2 && File.Exists($@"{Path}{GetDayNum}\sample2.txt") ? "sample2.txt" : "sample.txt";
         }
