@@ -2,8 +2,6 @@
 
 public class Day1 : Day
 {
-    protected override int GetDayNum() => 1;
-
     protected override long SolvePart1(List<string> lines)
     {
         var sum = 0;

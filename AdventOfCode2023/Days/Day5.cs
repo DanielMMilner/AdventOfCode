@@ -4,8 +4,6 @@ namespace AdventOfCode2023.Days;
 
 public class Day5 : Day
 {
-    protected override int GetDayNum() => 5;
-
     protected override long SolvePart1(List<string> lines)
     {
         var maps = GetMaps(lines);

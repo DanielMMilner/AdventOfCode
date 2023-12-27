@@ -2,8 +2,6 @@
 
 public class Day6 : Day
 {
-    protected override int GetDayNum() => 6;
-
     protected override long SolvePart1(List<string> lines)
     {
         var times = lines[0].Split(" ").Where(x => !string.IsNullOrEmpty(x)).Skip(1);

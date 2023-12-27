@@ -1,20 +1,12 @@
 ﻿using AdventOfCode2023.Days;
-using Xunit;
 
 namespace Tests.Tests;
 
-public class Day3Test
+public class Day3Test : DayTest
 {
-    private readonly Day _day = new Day3();
-
-    [Fact]
-    public void TestPart1() => Assert.Equal(4361, _day.GetPart1Answer(true));
-    [Fact]
-    public void Part1() => Assert.Equal(537732, _day.GetPart1Answer(false));
-
-    [Fact]
-    public void TestPart2() => Assert.Equal(467835, _day.GetPart2Answer(true));
-    
-    [Fact]
-    public void Part2() => Assert.Equal(84883664, _day.GetPart2Answer(false));
+    protected override Day GetDay() => new Day3();
+    protected override long GetPart1SampleAnswer() => 4361;
+    protected override long GetPart1Answer() => 537732;
+    protected override long GetPart2SampleAnswer() => 467835;
+    protected override long GetPart2Answer() => 84883664;
 }

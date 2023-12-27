@@ -4,8 +4,6 @@ namespace AdventOfCode2023.Days;
 
 public class Day3 : Day
 {
-    protected override int GetDayNum() => 3;
-
     protected override long SolvePart1(List<string> lines)
     {
         var nonSymbols = new List<char>
