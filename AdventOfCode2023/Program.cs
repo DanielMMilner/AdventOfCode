@@ -4,7 +4,7 @@ using AdventOfCode2023.Days;
 var stopWatch = new Stopwatch();
 
 stopWatch.Start();
-new Day5().Solve();
+new Day6().Solve();
 stopWatch.Stop();
 
 var ts = stopWatch.Elapsed;

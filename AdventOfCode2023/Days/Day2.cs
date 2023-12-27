@@ -6,7 +6,7 @@ public class Day2 : Day
 {
     protected override int GetDayNum() => 2;
 
-    protected override int SolvePart1(List<string> lines)
+    protected override long SolvePart1(List<string> lines)
     {
         const int red = 12;
         const int green = 13;
@@ -19,7 +19,7 @@ public class Day2 : Day
         return possibleGames.Sum(x => x.Id);
     }
 
-    protected override int SolvePart2(List<string> lines)
+    protected override long SolvePart2(List<string> lines)
     {
         var games = CreateGames(lines);
 

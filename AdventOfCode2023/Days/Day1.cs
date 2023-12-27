@@ -4,7 +4,7 @@ public class Day1 : Day
 {
     protected override int GetDayNum() => 1;
 
-    protected override int SolvePart1(List<string> lines)
+    protected override long SolvePart1(List<string> lines)
     {
         var sum = 0;
         foreach (var line in lines)
@@ -20,7 +20,7 @@ public class Day1 : Day
         return sum;
     }
 
-    protected override int SolvePart2(List<string> lines)
+    protected override long SolvePart2(List<string> lines)
     {
         var words = new List<string>
         {

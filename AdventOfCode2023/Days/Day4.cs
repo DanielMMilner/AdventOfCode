@@ -4,7 +4,7 @@ public class Day4 : Day
 {
     protected override int GetDayNum() => 4;
 
-    protected override int SolvePart1(List<string> lines)
+    protected override long SolvePart1(List<string> lines)
     {
         double sum = 0;
         foreach (var line in lines)
@@ -19,7 +19,7 @@ public class Day4 : Day
         return (int)sum;
     }
 
-    protected override int SolvePart2(List<string> lines)
+    protected override long SolvePart2(List<string> lines)
     {
         var scratchCards = Enumerable.Repeat(1, lines.Count).ToArray();
         for (var i = 0; i < lines.Count; i++)

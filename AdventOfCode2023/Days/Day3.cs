@@ -6,7 +6,7 @@ public class Day3 : Day
 {
     protected override int GetDayNum() => 3;
 
-    protected override int SolvePart1(List<string> lines)
+    protected override long SolvePart1(List<string> lines)
     {
         var nonSymbols = new List<char>
         {
@@ -64,7 +64,7 @@ public class Day3 : Day
         return engineParts.Sum();
     }
 
-    protected override int SolvePart2(List<string> lines)
+    protected override long SolvePart2(List<string> lines)
     {
         const char symbol = '*';
         var symbolIndexes = new List<List<int>>();
