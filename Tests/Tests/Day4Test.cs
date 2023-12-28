@@ -1,9 +1,18 @@
-﻿namespace Tests.Tests;
+﻿using Xunit;
+
+namespace Tests.Tests;
 
 public class Day4Test : DayTest
 {
-    protected override long GetPart1SampleAnswer() => 13;
-    protected override long GetPart1Answer() => 22674;
-    protected override long GetPart2SampleAnswer() => 30;
-    protected override long GetPart2Answer() => 5747443;
+    [Fact]
+    public void SamplePart1() => Assert.Equal(13, SamplePart1Answer);
+
+    [Fact]
+    public void Part1() => Assert.Equal(22_674, Part1Answer);
+
+    [Fact]
+    public void SamplePart2() => Assert.Equal(30, SamplePart2Answer);
+
+    [Fact]
+    public void Part2() => Assert.Equal(5_747_443, Part2Answer);
 }
