@@ -14,5 +14,5 @@ public class Day8Test : DayTest
     public void SamplePart2() => Assert.Equal(6, SamplePart2Answer);
 
     [Fact]
-    public void Part2() => Assert.Equal(-1, Part2Answer);
+    public void Part2() => Assert.Equal(10_371_555_451_871, Part2Answer);
 }
