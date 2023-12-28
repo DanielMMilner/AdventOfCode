@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using AdventOfCode2023.Days;
 
-var stopWatch = new Stopwatch();
-
-stopWatch.Start();
-new Day8().Solve();
+var stopWatch = Stopwatch.StartNew();
+new Day9().Solve();
 stopWatch.Stop();
 
 var ts = stopWatch.Elapsed;

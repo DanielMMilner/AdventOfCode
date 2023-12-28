@@ -4,9 +4,9 @@ public abstract class Day
 {
     public void Solve()
     {
-        // Console.WriteLine($"Part 1 Sample: {GetPart1Answer(true)}");
-        // Console.WriteLine($"Part 1: {GetPart1Answer(false)}");
-        // Console.WriteLine($"Part 2 Sample: {GetPart2Answer(true)}");
+        Console.WriteLine($"Part 1 Sample: {GetPart1Answer(true)}");
+        Console.WriteLine($"Part 1: {GetPart1Answer(false)}");
+        Console.WriteLine($"Part 2 Sample: {GetPart2Answer(true)}");
         Console.WriteLine($"Part 2: {GetPart2Answer(false)}");
     }
 
