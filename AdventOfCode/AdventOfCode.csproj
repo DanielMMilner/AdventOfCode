@@ -1,19 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <OutputType>Library</OutputType>
+        <RootNamespace>AdventOfCode</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="xunit" Version="2.6.4"/>
+        <Content Include="Years\**\*.txt">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\AdventOfCode\AdventOfCode.csproj"/>
+      <Folder Include="Years\" />
     </ItemGroup>
-
+    
 </Project>
