@@ -1,8 +1,12 @@
 ﻿using System.Diagnostics;
 using AdventOfCode2023.Days;
 
+var day = new Day11();
 var stopWatch = Stopwatch.StartNew();
-new Day10().Solve();
+Console.WriteLine($"Part 1 Sample: {day.GetPart1Answer(true)}");
+Console.WriteLine($"Part 1: {day.GetPart1Answer(false)}");
+Console.WriteLine($"Part 2 Sample: {day.GetPart2Answer(true)}");
+Console.WriteLine($"Part 2: {day.GetPart2Answer(false)}");
 stopWatch.Stop();
 
 var ts = stopWatch.Elapsed;

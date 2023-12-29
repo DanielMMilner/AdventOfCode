@@ -2,14 +2,6 @@
 
 public abstract class Day
 {
-    public void Solve()
-    {
-        Console.WriteLine($"Part 1 Sample: {GetPart1Answer(true)}");
-        Console.WriteLine($"Part 1: {GetPart1Answer(false)}");
-        Console.WriteLine($"Part 2 Sample: {GetPart2Answer(true)}");
-        Console.WriteLine($"Part 2: {GetPart2Answer(false)}");
-    }
-
     public long GetPart1Answer(bool useSample) => SolvePart1(GetLines(useSample, false));
     public long GetPart2Answer(bool useSample) => SolvePart2(GetLines(useSample, true));
 
