@@ -10,61 +10,86 @@ public class Aoc23Day12 : Aoc
 
     private long Solve(List<string> lines, int multiplier)
     {
-        var totals = new ConcurrentBag<int>();
+        var totals = new ConcurrentBag<long>();
 
         var chunkedLines = lines.Chunk(lines.Count / 1);
         Parallel.ForEach(chunkedLines, cl =>
         {
+            var c = 0;
             foreach (var line in cl)
             {
+                c++;
                 var data = line.Split(' ');
                 var report = string.Join('?', Enumerable.Repeat(data[0], multiplier)).Select(x => x).ToArray();
                 var nums = string.Join(',', Enumerable.Repeat(data[1], multiplier)).Split(',').Select(int.Parse)
                     .ToArray();
-                var count = GetCount(nums, report, 0, -1, 0);
+                var original = new char[report.Length];
+                report.CopyTo(original, 0);
+                var count = GetCount(nums, report, 0, -2, 0, original);
                 totals.Add(count);
+                Console.WriteLine(
+                    "{0,-30}{1,-25}{2,-20}{3,-20}{4,-15}",
+                    line,
+                    $"Completed: ({c} / {cl.Length})",
+                    $"Total: ({totals.Count} / {lines.Count})",
+                    $"Count: {count}",
+                    $"Sum: {totals.Sum()}"
+                );
+                Console.WriteLine(
+                    "-----------------------------------------------------------------------------------------------------------");
             }
         });
 
         return totals.Sum();
     }
 
-    private int GetCount(int[] nums, char[] line, int count, int lastMatch, int numIndex)
+    private long GetCount(int[] nums, char[] line, long count, int lastMatch, int numIndex, char[] original)
     {
+        Console.WriteLine(line);
         if (numIndex >= nums.Length)
         {
             //If we have run out of numbers and there are no more '#' then we have a valid line
-            if (!line.Contains('#'))
+            for (var i = lastMatch + 1; i < line.Length; i++)
             {
-                count++;
+                if (line[i] == '#')
+                {
+                    return count;
+                }
             }
 
-            return count;
+            return ++count;
         }
 
         var num = nums[numIndex];
         var matchIndex = Match(line, num, lastMatch);
-
+        
         while (matchIndex != -1)
         {
             //replace the match with an 'x' to prevent it from being found again
-            var newLine = new char[line.Length];
-            line.CopyTo(newLine, 0);
             for (var i = matchIndex; i < matchIndex + num; i++)
             {
-                newLine[i] = 'x';
+                line[i] = 'x';
             }
 
-            count = GetCount(nums, newLine, count, matchIndex, numIndex + 1);
+            var newCount = GetCount(nums, line, count, matchIndex, numIndex + 1, original);
+
+            count = newCount;
 
             var found = false;
-            for (var i = matchIndex; i < matchIndex + num; i++)
+            for (var i = matchIndex; i < line.Length; i++)
             {
-                if (line[i] == '?')
+                if (i < matchIndex + num && !found && original[i] == '?')
                 {
                     found = true;
                     line[i] = '.';
-                    break;
+                }
+                else if (original[i] == '#' && !found)
+                {
+                    return count;
+                }
+                else
+                {
+                    line[i] = original[i];
                 }
             }
 
@@ -73,17 +98,21 @@ public class Aoc23Day12 : Aoc
                 return count;
             }
 
-            matchIndex = Match(line, num, matchIndex);
+            matchIndex = Match(line, num, matchIndex - 1);
         }
 
         return count;
     }
 
-    private static int Match(char[] line, int num, int startIndex)
+    private static int Match(char[] line, int num, int lastMatch)
     {
-        startIndex = startIndex == -1 ? 0 : startIndex;
-        for (var i = startIndex; i < line.Length; i++)
+        for (var i = lastMatch + 2; i < line.Length; i++)
         {
+            if (line[i] == '.')
+            {
+                continue;
+            }
+
             var match = true;
             for (var j = 0; j < num; j++)
             {
