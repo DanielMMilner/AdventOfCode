@@ -13,6 +13,6 @@ public class Aoc23Day12Test : AocTest
     [Fact]
     public void SamplePart2() => Assert.Equal(525152, SamplePart2Answer);
 
-    [Fact(Skip = "Not implemented")]
-    public void Part2() => Assert.Equal(-1, Part2Answer);
+    [Fact]
+    public void Part2() => Assert.Equal(37366887898686, Part2Answer);
 }

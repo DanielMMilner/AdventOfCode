@@ -12,40 +12,29 @@ public class Aoc23Day12 : Aoc
     {
         var totals = new ConcurrentBag<long>();
 
-        var chunkedLines = lines.Chunk(lines.Count / 1);
+        var chunkedLines = lines.Chunk(lines.Count / 6);
         Parallel.ForEach(chunkedLines, cl =>
         {
-            var c = 0;
             foreach (var line in cl)
             {
-                c++;
                 var data = line.Split(' ');
                 var report = string.Join('?', Enumerable.Repeat(data[0], multiplier)).Select(x => x).ToArray();
                 var nums = string.Join(',', Enumerable.Repeat(data[1], multiplier)).Split(',').Select(int.Parse)
                     .ToArray();
                 var original = new char[report.Length];
                 report.CopyTo(original, 0);
-                var count = GetCount(nums, report, 0, -2, 0, original);
+                var cache = new Dictionary<string, long>();
+                var count = GetCount(nums, report, -2, 0, original, cache);
                 totals.Add(count);
-                Console.WriteLine(
-                    "{0,-30}{1,-25}{2,-20}{3,-20}{4,-15}",
-                    line,
-                    $"Completed: ({c} / {cl.Length})",
-                    $"Total: ({totals.Count} / {lines.Count})",
-                    $"Count: {count}",
-                    $"Sum: {totals.Sum()}"
-                );
-                Console.WriteLine(
-                    "-----------------------------------------------------------------------------------------------------------");
             }
         });
 
         return totals.Sum();
     }
 
-    private long GetCount(int[] nums, char[] line, long count, int lastMatch, int numIndex, char[] original)
+    private long GetCount(int[] nums, char[] line, int lastMatch, int numIndex, char[] original, Dictionary<string, long> cache)
     {
-        Console.WriteLine(line);
+        long count = 0;
         if (numIndex >= nums.Length)
         {
             //If we have run out of numbers and there are no more '#' then we have a valid line
@@ -53,16 +42,16 @@ public class Aoc23Day12 : Aoc
             {
                 if (line[i] == '#')
                 {
-                    return count;
+                    return 0;
                 }
             }
 
-            return ++count;
+            return 1;
         }
 
         var num = nums[numIndex];
         var matchIndex = Match(line, num, lastMatch);
-        
+
         while (matchIndex != -1)
         {
             //replace the match with an 'x' to prevent it from being found again
@@ -71,9 +60,20 @@ public class Aoc23Day12 : Aoc
                 line[i] = 'x';
             }
 
-            var newCount = GetCount(nums, line, count, matchIndex, numIndex + 1, original);
+            var key = new string(line.Skip(matchIndex).ToArray()) + ":" + string.Join(",", nums.Skip(numIndex));
 
-            count = newCount;
+            long newCount;
+            if (cache.TryGetValue(key, out var value))
+            {
+                newCount = value;
+            }
+            else
+            {
+                newCount = GetCount(nums, line, matchIndex, numIndex + 1, original, cache);
+                cache.Add(key, newCount);
+            }
+
+            count += newCount;
 
             var found = false;
             for (var i = matchIndex; i < line.Length; i++)
