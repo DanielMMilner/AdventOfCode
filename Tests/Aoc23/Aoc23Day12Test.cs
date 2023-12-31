@@ -8,11 +8,11 @@ public class Aoc23Day12Test : AocTest
     public void SamplePart1() => Assert.Equal(21, SamplePart1Answer);
 
     [Fact]
-    public void Part1() => Assert.Equal(7916, Part1Answer);
+    public void Part1() => Assert.Equal(7_916, Part1Answer);
 
     [Fact]
-    public void SamplePart2() => Assert.Equal(525152, SamplePart2Answer);
+    public void SamplePart2() => Assert.Equal(525_152, SamplePart2Answer);
 
     [Fact]
-    public void Part2() => Assert.Equal(37366887898686, Part2Answer);
+    public void Part2() => Assert.Equal(37_366_887_898_686, Part2Answer);
 }
