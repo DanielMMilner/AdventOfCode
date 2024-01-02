@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
-using AdventOfCode.Years.Aoc23.Day12;
+using AdventOfCode.Years.Aoc23.Day13;
 
-var day = new Aoc23Day12();
+var day = new Aoc23Day13();
 var stopWatch = Stopwatch.StartNew();
 // Console.WriteLine($"Part 1 Sample: {day.GetPart1Answer(true)}");
 // Console.WriteLine($"Part 1: {day.GetPart1Answer(false)}");
