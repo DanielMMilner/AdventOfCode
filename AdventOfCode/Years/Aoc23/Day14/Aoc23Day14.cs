@@ -2,6 +2,10 @@
 
 public class Aoc23Day14 : Aoc
 {
+    private const char SquareRock = '#';
+    private const char CircleRock = 'O';
+    private const char Empty = '.';
+
     protected override long SolvePart1(List<string> lines)
     {
         var charLines = lines.Select(x => x.ToCharArray()).ToArray();
@@ -10,6 +14,7 @@ public class Aoc23Day14 : Aoc
         {
             Console.WriteLine(string.Join("", charLine));
         }
+
         return CountLoad(charLines);
     }
 
@@ -70,7 +75,7 @@ public class Aoc23Day14 : Aoc
 
     private static int CountLoad(IReadOnlyCollection<char[]> charLines) =>
         charLines
-            .Select(t => t.Count(x => x == 'O'))
+            .Select(t => t.Count(x => x == CircleRock))
             .Select((count, i) => count * (charLines.Count - i))
             .Sum();
 
@@ -93,28 +98,28 @@ public class Aoc23Day14 : Aoc
         }
     }
 
-    private static void TiltNorth(char[][] charLines)
+    private static void TiltNorth(char[][] rocks)
     {
-        for (var col = 0; col < charLines[0].Length; col++)
+        for (var col = 0; col < rocks[0].Length; col++)
         {
             var squareIndex = -1;
             var circleCount = 0;
-            for (var row = 0; row < charLines.Length; row++)
+            for (var row = 0; row < rocks.Length; row++)
             {
-                if (charLines[row][col] == 'O')
+                if (rocks[row][col] == CircleRock)
                 {
                     circleCount++;
                 }
 
-                if (charLines[row][col] == '#' || row == charLines.Length - 1)
+                if (rocks[row][col] == SquareRock || row == rocks.Length - 1)
                 {
                     for (var j = squareIndex + 1; j <= row; j++)
                     {
-                        circleCount = RollRocks(charLines, j, col, circleCount);
+                        circleCount = RollRocks(rocks, j, col, circleCount);
                     }
                 }
 
-                if (charLines[row][col] == '#')
+                if (rocks[row][col] == SquareRock)
                 {
                     squareIndex = row;
                     circleCount = 0;
@@ -123,28 +128,28 @@ public class Aoc23Day14 : Aoc
         }
     }
 
-    private static void TiltSouth(char[][] charLines)
+    private static void TiltSouth(char[][] rocks)
     {
-        for (var col = 0; col < charLines[0].Length; col++)
+        for (var col = 0; col < rocks[0].Length; col++)
         {
-            var squareIndex = charLines.Length;
+            var squareIndex = rocks.Length;
             var circleCount = 0;
-            for (var row = charLines.Length - 1; row >= 0; row--)
+            for (var row = rocks.Length - 1; row >= 0; row--)
             {
-                if (charLines[row][col] == 'O')
+                if (rocks[row][col] == CircleRock)
                 {
                     circleCount++;
                 }
 
-                if (charLines[row][col] == '#' || row == 0)
+                if (rocks[row][col] == SquareRock || row == 0)
                 {
                     for (var j = squareIndex - 1; j >= row; j--)
                     {
-                        circleCount = RollRocks(charLines, j, col, circleCount);
+                        circleCount = RollRocks(rocks, j, col, circleCount);
                     }
                 }
 
-                if (charLines[row][col] == '#')
+                if (rocks[row][col] == SquareRock)
                 {
                     squareIndex = row;
                     circleCount = 0;
@@ -153,28 +158,28 @@ public class Aoc23Day14 : Aoc
         }
     }
 
-    private static void TiltWest(char[][] charLines)
+    private static void TiltWest(char[][] rocks)
     {
-        for (var row = 0; row < charLines.Length; row++)
+        for (var row = 0; row < rocks.Length; row++)
         {
             var squareIndex = -1;
             var circleCount = 0;
-            for (var col = 0; col < charLines[row].Length; col++)
+            for (var col = 0; col < rocks[row].Length; col++)
             {
-                if (charLines[row][col] == 'O')
+                if (rocks[row][col] == CircleRock)
                 {
                     circleCount++;
                 }
 
-                if (charLines[row][col] == '#' || col == charLines[row].Length - 1)
+                if (rocks[row][col] == SquareRock || col == rocks[row].Length - 1)
                 {
                     for (var j = squareIndex + 1; j <= col; j++)
                     {
-                        circleCount = RollRocks(charLines, row, j, circleCount);
+                        circleCount = RollRocks(rocks, row, j, circleCount);
                     }
                 }
 
-                if (charLines[row][col] == '#')
+                if (rocks[row][col] == SquareRock)
                 {
                     squareIndex = col;
                     circleCount = 0;
@@ -183,28 +188,28 @@ public class Aoc23Day14 : Aoc
         }
     }
 
-    private static void TiltEast(char[][] charLines)
+    private static void TiltEast(char[][] rocks)
     {
-        for (var row = 0; row < charLines.Length; row++)
+        for (var row = 0; row < rocks.Length; row++)
         {
-            var squareIndex = charLines.Length;
+            var squareIndex = rocks.Length;
             var circleCount = 0;
-            for (var col = charLines[row].Length - 1; col >= 0; col--)
+            for (var col = rocks[row].Length - 1; col >= 0; col--)
             {
-                if (charLines[row][col] == 'O')
+                if (rocks[row][col] == CircleRock)
                 {
                     circleCount++;
                 }
 
-                if (charLines[row][col] == '#' || col == 0)
+                if (rocks[row][col] == SquareRock || col == 0)
                 {
                     for (var j = squareIndex - 1; j >= col; j--)
                     {
-                        circleCount = RollRocks(charLines, row, j, circleCount);
+                        circleCount = RollRocks(rocks, row, j, circleCount);
                     }
                 }
 
-                if (charLines[row][col] == '#')
+                if (rocks[row][col] == SquareRock)
                 {
                     squareIndex = col;
                     circleCount = 0;
@@ -215,18 +220,18 @@ public class Aoc23Day14 : Aoc
 
     private static int RollRocks(char[][] rocks, int row, int col, int circleCount)
     {
-        if (rocks[row][col] == '#')
+        if (rocks[row][col] == SquareRock)
         {
             return circleCount;
         }
 
         if (circleCount != 0)
         {
-            rocks[row][col] = 'O';
+            rocks[row][col] = CircleRock;
             return circleCount - 1;
         }
 
-        rocks[row][col] = '.';
+        rocks[row][col] = Empty;
         return circleCount;
     }
 
